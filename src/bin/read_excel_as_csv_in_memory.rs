@@ -7,7 +7,7 @@ pub fn read_excel(excel_file_path: &str) -> Result<Vec<Vec<String>>, Box<dyn Err
     let mut workbook: Xlsx<_> = open_workbook(excel_file_path)?;
     let mut rows: Vec<Vec<String>> = Vec::new();
 
-    if let Some(Ok(sheet)) = workbook.worksheet_range_at(0) {
+    if let Some(Ok(sheet)) = workbook.worksheet_range_at(0) {   // Reads only first sheet
         for row in sheet.rows() {
             let mut csv_row = Vec::new();
             for cell in row {
@@ -30,7 +30,7 @@ pub fn write_csv_to_memory(data: &[Vec<String>]) -> Result<Vec<u8>, Box<dyn Erro
     for row in data {
         let mut csv_row = row.clone();
         while csv_row.len() < max_fields {
-            csv_row.push("".to_string()); // Add empty fields if the row has fewer fields
+            csv_row.push("".to_string()); // Add empty fields if the row has fewer fields. Avoids error.
         }
         if csv_row.len() > max_fields {
             csv_row.truncate(max_fields); // Remove extra fields if the row has more fields
